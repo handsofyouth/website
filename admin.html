@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HYSA Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Instrument Sans", "sans-serif"],
+            },
+            colors: {
+              "hysa-red": "#fb1c07",
+              "hysa-yellow": "#f3e803",
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="bg-white dark:bg-[#3A3A3A] text-slate-900 dark:text-slate-200 font-sans antialiased min-h-screen transition-colors duration-300"
+  >
+    <div
+      id="loginGate"
+      class="fixed inset-0 flex items-center justify-center p-6 z-50 bg-white dark:bg-[#3A3A3A]"
+    >
+      <div
+        class="bg-white dark:bg-[#4A4A4A] border border-slate-200 dark:border-[#6C6C6C] p-8 rounded-3xl w-full max-w-sm shadow-xl transition-all"
+      >
+        <h2
+          class="font-bold text-[32px] text-slate-900 dark:text-white tracking-tight text-center mb-6"
+        >
+          Admin Access
+        </h2>
+        <input
+          type="password"
+          id="pass"
+          class="w-full bg-slate-50 dark:bg-[#3A3A3A] border border-slate-200 dark:border-[#6C6C6C] p-4 rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-hysa-red/20 focus:border-hysa-red text-slate-900 dark:text-white font-medium"
+          placeholder="Enter Password"
+        />
+        <button
+          onclick="checkAuth()"
+          class="w-full bg-hysa-red text-white py-3.5 px-6 rounded-xl font-bold hover:bg-red-700 shadow-md shadow-red-900/20 transition cursor-pointer"
+        >
+          Connect
+        </button>
+      </div>
+    </div>
+
+    <div id="dashboard" class="hidden max-w-6xl mx-auto p-6 space-y-12 py-12">
+      <header
+        class="flex flex-col sm:flex-row justify-between items-center bg-white dark:bg-[#4A4A4A] border border-slate-200 dark:border-[#6C6C6C] p-6 rounded-3xl shadow-md gap-4"
+      >
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:block">
+            <h1
+              class="font-bold text-xl text-slate-900 dark:text-white tracking-tight"
+            >
+              Hands of Youth Admin
+            </h1>
+            <span
+              class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest font-medium"
+              >Control Board</span
+            >
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            onclick="toggleTheme()"
+            class="p-2 px-3 rounded-xl border border-slate-200 dark:border-[#6C6C6C] bg-white dark:bg-[#3A3A3A] text-slate-700 dark:text-white text-xs font-semibold hover:bg-slate-50 dark:hover:bg-[#4A4A4A] transition-all cursor-pointer"
+          >
+            <span class="dark:hidden">Dark Mode</span>
+            <span class="hidden dark:inline">Light Mode</span>
+          </button>
+          <button
+            onclick="toggleTimestamps()"
+            id="tsBtn"
+            class="px-5 py-2 text-xs rounded-xl border border-slate-200 dark:border-[#6C6C6C] bg-white dark:bg-[#3A3A3A] hover:bg-slate-50 dark:hover:bg-[#4A4A4A] text-slate-700 dark:text-white font-semibold transition-all cursor-pointer"
+          >
+            Timestamps: OFF
+          </button>
+          <a
+            href="index.html"
+            class="px-5 py-2 text-xs rounded-xl border border-transparent bg-hysa-red hover:bg-red-700 text-white font-bold transition-all shadow-sm"
+            >Back to Website</a
+          >
+        </div>
+      </header>
+
+      <div
+        id="dataContainer"
+        class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
+      ></div>
+    </div>
+
+    <script>
+      // --- SUPABASE CONFIG ---
+      const supabaseUrl = "https://wgjlemjqcqewlwryvlts.supabase.co";
+      const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndnamxlbWpxY3Fld2x3cnl2bHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDI4OTUsImV4cCI6MjA5ODIxODg5NX0.5nlAhNX8_TULW0RfyUi9k8cSjvMU850b-DjYJt1T5Bg";
+      const sb = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      let showTimestamps = false;
+      let cachedData = {};
+
+      // Track active row slide index for each individual table dataset
+      let currentCardIndices = {
+        students: 0,
+        volunteers: 0,
+        inquiries: 0,
+        donors: 0,
+      };
+
+      function checkAuth() {
+        if (document.getElementById("pass").value === "SecretPass") {
+          document.getElementById("loginGate").classList.add("hidden");
+          document.getElementById("dashboard").classList.remove("hidden");
+          fetchData();
+        } else {
+          alert("Access Denied");
+        }
+      }
+
+      async function fetchData() {
+        const tables = ["students", "volunteers", "inquiries", "donors"];
+        for (const table of tables) {
+          const { data } = await sb.from(table).select("*");
+          cachedData[table] = data || [];
+          currentCardIndices[table] = 0; // Initialize tracking index pointer
+        }
+        renderDashboard();
+      }
+
+      // Slider navigation commands
+      window.navigateCard = function (table, direction) {
+        const maxIndex = cachedData[table].length - 1;
+        if (maxIndex < 0) return;
+
+        currentCardIndices[table] += direction;
+
+        // Infinite loop threshold loop bounds checking
+        if (currentCardIndices[table] < 0) {
+          currentCardIndices[table] = maxIndex;
+        } else if (currentCardIndices[table] > maxIndex) {
+          currentCardIndices[table] = 0;
+        }
+
+        renderDashboard();
+      };
+
+      function toggleTimestamps() {
+        showTimestamps = !showTimestamps;
+        document.getElementById("tsBtn").innerText =
+          `Timestamps: ${showTimestamps ? "ON" : "OFF"}`;
+        renderDashboard();
+      }
+
+      function toggleTheme() {
+        if (document.documentElement.classList.contains("dark")) {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        }
+      }
+
+      function renderDashboard() {
+        const container = document.getElementById("dataContainer");
+        container.innerHTML = "";
+
+        for (const [table, rows] of Object.entries(cachedData)) {
+          const activeIndex = currentCardIndices[table];
+          const hasRows = rows.length > 0;
+          const activeRow = hasRows ? rows[activeIndex] : null;
+
+          // Inner dynamic rendering template for properties map loop
+          let rowPropertiesHTML = "";
+          if (activeRow) {
+            rowPropertiesHTML = Object.entries(activeRow)
+              .map(([k, v]) => {
+                if (k === "created_at" && !showTimestamps) return "";
+
+                if (k === "created_at") {
+                  return `
+                    <div class="p-3 bg-slate-50 dark:bg-[#3A3A3A] border border-slate-100 dark:border-transparent rounded-xl flex flex-col justify-center col-span-2">
+                        <span class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mb-1.5">Timestamp</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-mono break-all">${v}</span>
+                    </div>
+                  `;
+                }
+
+                return `
+                  <div class="p-1 flex flex-col justify-start">
+                      <span class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mb-1.5">${k.replace(/_/g, " ")}</span>
+                      <span class="text-sm text-slate-700 dark:text-slate-200 font-semibold break-words whitespace-pre-wrap">${v !== null && v !== undefined ? v : '<span class="text-slate-300 dark:text-slate-600 italic font-normal">empty</span>'}</span>
+                  </div>
+                `;
+              })
+              .join("");
+          }
+
+          container.innerHTML += `
+            <section class="space-y-4 bg-slate-50/50 dark:bg-[#444444]/30 border border-slate-100 dark:border-transparent p-5 rounded-3xl shadow-inner">
+                <div class="flex items-center justify-between border-l-4 border-hysa-red pl-3">
+                    <h2 class="font-bold text-[24px] capitalize text-slate-900 dark:text-white tracking-tight">
+                        ${table}
+                    </h2>
+                    ${
+                      hasRows
+                        ? `
+                      <span class="text-xs bg-slate-200 dark:bg-[#5A5A5A] px-3 py-1 rounded-full text-slate-600 dark:text-slate-300 font-bold">
+                        ${activeIndex + 1} / ${rows.length}
+                      </span>
+                    `
+                        : ""
+                    }
+                </div>
+
+                <div class="relative min-h-[280px]">
+                    ${
+                      hasRows
+                        ? `
+                      <div class="bg-white dark:bg-[#4A4A4A] border border-slate-200 dark:border-[#6C6C6C] p-6 rounded-2xl shadow-md flex flex-col justify-between h-full space-y-6">
+                          <div class="grid grid-cols-2 gap-x-4 gap-y-5 w-full">
+                              ${rowPropertiesHTML}
+                          </div>
+                          
+                          <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-[#5A5A5A]">
+                              <button 
+                                  onclick="navigateCard('${table}', -1)" 
+                                  class="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-[#6C6C6C] bg-white dark:bg-[#3A3A3A] text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-[#4A4A4A] transition-all cursor-pointer"
+                              >
+                                &larr; Previous
+                              </button>
+                              <button 
+                                  onclick="navigateCard('${table}', 1)" 
+                                  class="px-4 py-2 text-xs font-bold rounded-xl bg-hysa-red text-white hover:bg-red-700 transition-all shadow-sm cursor-pointer"
+                              >
+                                Next &rarr;
+                              </button>
+                          </div>
+                      </div>
+                    `
+                        : `
+                      <div class="bg-white dark:bg-[#4A4A4A] border border-dashed border-slate-200 dark:border-[#6C6C6C] p-12 rounded-2xl flex items-center justify-center">
+                        <p class="text-sm text-slate-400 dark:text-slate-500 italic">No records found in this database.</p>
+                      </div>
+                    `
+                    }
+                </div>
+            </section>
+          `;
+        }
+      }
+    </script>
+  </body>
+</html>

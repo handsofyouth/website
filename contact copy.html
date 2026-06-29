@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hub Portal | Hands of Youth</title>
+
+    <!-- Premium Typography Strategy -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,600;0,700;1,500&family=Inter:wght=400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind Engine -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Supabase CDN Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Cormorant Garamond", "Georgia", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <script>
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-[#0b0f19] text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden relative selection:bg-rose-500 selection:text-white transition-colors duration-300"
+  >
+    <!-- Immersive Background Mesh Blobs -->
+    <div
+      class="hidden dark:block absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-rose-500/10 to-orange-500/0 rounded-full blur-[120px] pointer-events-none z-0"
+    ></div>
+    <div
+      class="hidden dark:block absolute top-[400px] right-10 w-[600px] h-[600px] bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-[140px] pointer-events-none z-0"
+    ></div>
+
+    <!-- Header / Navigation -->
+    <header
+      class="sticky top-0 z-40 bg-white/80 dark:bg-[#0b0f19]/70 backdrop-blur-xl border-b border-slate-200/60 dark:border-white/5 transition-colors duration-300"
+    >
+      <div
+        class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between gap-4"
+      >
+        <a href="index.html" class="flex items-center gap-3 shrink-0">
+          <img
+            class="w-11 h-11 object-contain bg-slate-900/5 dark:bg-white/10 p-1.5 rounded-xl border border-slate-900/10 dark:border-white/10"
+            src="assets/images/logo-icon.png"
+            alt="Logo Icon"
+          />
+          <div class="flex flex-col leading-none">
+            <span
+              class="font-bold tracking-tight text-slate-900 dark:text-white text-sm md:text-base"
+              >Hands of Youth Service Association</span
+            >
+            <span class="text-[11px] font-medium text-slate-400 mt-0.5"
+              >Since 2020</span
+            >
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-6">
+          <nav
+            class="flex items-center gap-1 font-medium text-[14px] text-slate-600 dark:text-slate-300"
+          >
+            <a
+              href="index.html"
+              class="px-3.5 py-1.5 rounded-full hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all"
+              >Home</a
+            >
+            <a
+              href="discover.html"
+              class="px-3.5 py-1.5 rounded-full hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all"
+              >Discover</a
+            >
+            <a
+              href="tutoring.html"
+              class="px-3.5 py-1.5 rounded-full hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all"
+              >Peer2Peer</a
+            >
+            <a
+              href="volunteer.html"
+              class="px-3.5 py-1.5 rounded-full hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all"
+              >Volunteer</a
+            >
+            <a
+              href="support.html"
+              class="px-3.5 py-1.5 rounded-full hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all"
+              >Support Us</a
+            >
+            <a
+              href="contact.html"
+              class="px-3.5 py-1.5 rounded-full text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 font-semibold transition-all"
+              >Contact</a
+            >
+          </nav>
+          <button
+            onclick="toggleTheme()"
+            class="p-2 px-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-white/10 transition-all cursor-pointer"
+          >
+            <span class="dark:hidden">Dark Mode</span>
+            <span class="hidden dark:inline">Light Mode</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main View Component -->
+    <main
+      class="flex-grow max-w-6xl mx-auto w-full px-6 py-12 md:py-20 relative z-10"
+    >
+      <section class="text-center max-w-3xl mx-auto mb-12">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-rose-500/5 to-orange-500/5 dark:from-rose-500/10 dark:to-orange-500/10 border border-rose-200 dark:border-rose-500/30 font-bold text-[11px] text-rose-600 dark:text-rose-300 uppercase tracking-widest mb-6 shadow-sm"
+        >
+          Registry Application Hub
+        </div>
+        <h1
+          class="font-serif font-bold text-5xl text-slate-900 dark:text-white tracking-tight mb-4"
+        >
+          Let us connect and build<span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-500"
+          >
+            something good.</span
+          >
+        </h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+          Select your clear intent configuration pathways below to register
+          directly into our structural database.
+        </p>
+      </section>
+
+      <!-- Type Switcher Control Tabs -->
+      <div
+        class="max-w-xl mx-auto mb-10 p-1.5 bg-slate-200/60 dark:bg-white/5 rounded-2xl grid grid-cols-3 gap-1 border border-slate-300/30 dark:border-white/5"
+      >
+        <button
+          onclick="switchFormType('student')"
+          id="tab-student"
+          class="py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm"
+        >
+          Student Sign Up
+        </button>
+        <button
+          onclick="switchFormType('volunteer')"
+          id="tab-volunteer"
+          class="py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+        >
+          Volunteer
+        </button>
+        <button
+          onclick="switchFormType('donor')"
+          id="tab-donor"
+          class="py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+        >
+          Support/Donor
+        </button>
+      </div>
+
+      <!-- Centralized Single Form Card Wrapper -->
+      <div
+        class="max-w-2xl mx-auto bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-8 sm:p-10 rounded-[2.5rem] shadow-xl backdrop-blur-md relative"
+      >
+        <!-- Informational contextual header that switches dynamically -->
+        <div class="mb-8" id="formHeaderContext">
+          <h2
+            class="font-serif font-bold text-2xl text-slate-900 dark:text-white mb-1"
+          >
+            Student Sign Up
+          </h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
+            Official sign-up form for the Hands of Youth Service Association's
+            online classes. Contact us at
+            <a
+              href="mailto:info@handsofyouth.ca"
+              class="text-rose-500 hover:underline"
+              >info@handsofyouth.ca</a
+            >.
+          </p>
+        </div>
+
+        <div
+          id="errorBanner"
+          class="hidden mb-6 p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm rounded-xl font-medium"
+        ></div>
+
+        <form id="unifiedHubForm" class="flex flex-col gap-5">
+          <!-- Base Global Information Block -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label
+                for="reg-name"
+                id="label-reg-name"
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >Student's Full Name *</label
+              >
+              <input
+                id="reg-name"
+                type="text"
+                required
+                placeholder="Alex Mercer"
+                class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label
+                for="reg-email"
+                id="label-reg-email"
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >Student Email Address *</label
+              >
+              <input
+                id="reg-email"
+                type="email"
+                required
+                placeholder="alex@example.com"
+                class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          <hr class="border-slate-100 dark:border-white/5 my-2" />
+
+          <!-- ================= DYNAMIC INJECTED INPUT SECTION ================= -->
+          <div id="dynamicFieldsContainer" class="flex flex-col gap-5">
+            <!-- Default Injection: New Advanced Student Fields matching your exact requested spec sheet -->
+            <div class="flex flex-col gap-2">
+              <label
+                for="field-parent-name"
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >Primary Parent/Guardian Full Name *</label
+              >
+              <input
+                id="field-parent-name"
+                type="text"
+                required
+                placeholder="Parent or Guardian full legal name"
+                class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-2">
+                <label
+                  for="field-parent-email"
+                  class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                  >Primary Parent/Guardian Email *</label
+                >
+                <input
+                  id="field-parent-email"
+                  type="email"
+                  required
+                  placeholder="parent@example.com"
+                  class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+                />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label
+                  for="field-parent-phone"
+                  class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                  >Primary Parent/Guardian Phone Number *</label
+                >
+                <input
+                  id="field-parent-phone"
+                  type="tel"
+                  required
+                  placeholder="604-555-0199"
+                  class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label
+                for="field-parent-social"
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >Primary Parent/Guardian Social Media</label
+              >
+              <input
+                id="field-parent-social"
+                type="text"
+                placeholder="WeChat ID, Instagram tag, Facebook name, or N/A"
+                class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all"
+              />
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >What classes would you like to sign up for? Select all that
+                apply. *</span
+              >
+              <div class="flex flex-col gap-2.5">
+                <label
+                  class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    name="classes"
+                    value="English Program"
+                    id="class-english"
+                    class="mt-1 accent-rose-500 rounded"
+                  />
+                  <div class="flex flex-col">
+                    <span
+                      class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >English Program</span
+                    >
+                    <span class="text-xs text-slate-400 mt-0.5"
+                      >Monday 7:00 - 8:30</span
+                    >
+                  </div>
+                </label>
+                <label
+                  class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    name="classes"
+                    value="Math Program"
+                    id="class-math"
+                    class="mt-1 accent-rose-500 rounded"
+                  />
+                  <div class="flex flex-col">
+                    <span
+                      class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >Math Program</span
+                    >
+                    <span class="text-xs text-slate-400 mt-0.5"
+                      >Friday 7:00 - 8:30</span
+                    >
+                  </div>
+                </label>
+                <label
+                  class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    name="classes"
+                    value="University Admission Aid"
+                    id="class-uni"
+                    class="mt-1 accent-rose-500 rounded"
+                  />
+                  <div class="flex flex-col">
+                    <span
+                      class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >University Admission Aid Program</span
+                    >
+                    <span class="text-xs text-rose-400 font-medium mt-0.5"
+                      >Only available for grade 10 and higher</span
+                    >
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label
+                for="field-comments"
+                class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                >Any questions, comments, or concerns?</label
+              >
+              <textarea
+                id="field-comments"
+                rows="3"
+                placeholder="Write any additional details or programmatic requirements here..."
+                class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all resize-none"
+              ></textarea>
+            </div>
+          </div>
+          <!-- =================================================================== -->
+
+          <div class="mt-4">
+            <button
+              type="submit"
+              id="submitBtn"
+              class="w-full relative group/btn overflow-hidden rounded-2xl p-[1px] shadow-md transition-all hover:scale-[1.01] cursor-pointer"
+            >
+              <span
+                class="absolute inset-0 bg-gradient-to-r from-rose-500 via-purple-500 to-orange-500 rounded-2xl"
+              ></span>
+              <span
+                id="submitBtnText"
+                class="relative block px-6 py-4 bg-slate-900 dark:bg-[#0b0f19] rounded-[15px] font-sans font-bold text-xs tracking-widest uppercase text-white group-hover/btn:bg-transparent transition-colors duration-300"
+              >
+                Submit Application Info →
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Complete Success Panel Card -->
+        <!-- Complete Success Panel Card -->
+        <div id="successCard" class="hidden text-center py-10">
+          <div
+            class="w-16 h-16 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl"
+          >
+            ✓
+          </div>
+          <!-- Added dynamic IDs below -->
+          <h3
+            id="successTitle"
+            class="font-serif font-bold text-3xl text-slate-900 dark:text-white mb-2"
+          >
+            Registration Saved!
+          </h3>
+          <p
+            id="successMessage"
+            class="text-slate-500 dark:text-slate-400 text-sm max-w-sm mx-auto mb-8"
+          >
+            We will send an email shortly regarding information to determine
+            student's level and to provide more details about the program.
+          </p>
+          <button
+            onclick="window.location.reload()"
+            class="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
+          >
+            Submit New Form
+          </button>
+        </div>
+      </div>
+    </main>
+    <script>
+      // ======= PLACE YOUR SUPABASE CREDENTIALS HERE =======
+      const SUPABASE_URL = "https://rxgnqwdzxmetwlbxbffn.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4Z25xd2R6eG1ldHdsYnhiZmZuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDQ5OTczNSwiZXhwIjoyMDk2MDc1NzM1fQ.VNFbV3L6p1FWvhVd5hyQxhQuP6YNrHpXQEGwBGFgBlo";
+      // ===================================================
+
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      let currentFormType = "student";
+
+      // HTML Content Sub-Templates
+      const fieldsTemplate = {
+        student: `
+        <div class="flex flex-col gap-2">
+          <label for="field-parent-name" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Primary Parent/Guardian Full Name *</label>
+          <input id="field-parent-name" type="text" required placeholder="Parent or Guardian full legal name" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-parent-email" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Primary Parent/Guardian Email *</label>
+          <input id="field-parent-email" type="email" required placeholder="parent@example.com" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-parent-social" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Primary Parent/Guardian Social Media</label>
+          <input id="field-parent-social" type="text" placeholder="WeChat ID, Instagram tag, Facebook name, or N/A" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-parent-phone" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Primary Parent/Guardian Phone Number *</label>
+          <input id="field-parent-phone" type="tel" required placeholder="604-555-0199" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">What classes would you like to sign up for? Select all that apply. *</span>
+          <div class="flex flex-col gap-2.5">
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="classes" value="English Program" id="class-english" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">English Program (Monday 7:00 - 8:30)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="classes" value="Math Program" id="class-math" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Math Program (Friday 7:00 - 8:30)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="classes" value="University Admission Aid" id="class-uni" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">University Admission Aid Program | <span class="text-rose-400">Only available for grade 10 and higher</span></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-comments" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Any questions, comments, or concerns?</label>
+          <textarea id="field-comments" rows="3" placeholder="Write any additional details here..." class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all resize-none"></textarea>
+        </div>
+      `,
+        volunteer: `
+        <div class="flex flex-col gap-2">
+          <label for="field-vol-phone" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Phone Number *</label>
+          <input id="field-vol-phone" type="tel" required placeholder="604-555-0199" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Position/Program of Interest *</span>
+          <div class="flex flex-col gap-2.5">
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="English Program" id="vol-eng" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">English Program (Monday 7:00 - 8:30)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="Math Program" id="vol-math" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Math Program (Friday 7:00 - 8:30)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="University Admission Aid" id="vol-uni" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">University Admission Aid Program | <span class="text-rose-400">Uni students+</span></span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="Social Media Team" id="vol-social" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Social Media Team</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="Logistics Team" id="vol-logistics" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Logistics Team</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="checkbox" name="vol-positions" value="Human Resource Team" id="vol-hr" class="accent-rose-500 rounded">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Human Resource Team</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-vol-comments" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Any questions, comments, or concerns?</label>
+          <textarea id="field-vol-comments" rows="3" placeholder="Write any details here..." class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all resize-none"></textarea>
+        </div>
+      `,
+        donor: `
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Affiliated Classification *</span>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="radio" name="donor-org-type" value="Independent / Individual" checked class="accent-rose-500">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Individual</span>
+            </label>
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.01] border border-slate-200 dark:border-white/5 hover:border-rose-300 transition-all cursor-pointer">
+              <input type="radio" name="donor-org-type" value="Corporate" id="donor-org-corp" class="accent-rose-500">
+              <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">Corporate / Org</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-org-name" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Organization / Corporate Brand Name (Optional)</label>
+          <input id="field-org-name" type="text" placeholder="e.g., Venture Capital Partners Corp" class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-dtype-select" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Sponsorship/Donation Classification *</label>
+          <select id="field-dtype-select" onchange="handleDonorOtherOption(this.value)" required class="w-full bg-slate-50 dark:bg-[#111625] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all cursor-pointer">
+            <option value="" disabled selected>-- Select Donation Path --</option>
+            <option value="Financial Support / One-time Donation">Financial Support / One-time Donation</option>
+            <option value="Recurring Corporate Grant">Recurring Corporate Grant</option>
+            <option value="Venue / Space Sponsorship">Venue / Space Sponsorship</option>
+            <option value="Learning Materials & Equipment Supply">Learning Materials & Equipment Supply</option>
+            <option value="Other">Other (Type below)...</option>
+          </select>
+        </div>
+
+        <div id="donor-other-wrapper" class="hidden flex flex-col gap-2 transition-all duration-300">
+          <label for="field-dtype-other" class="text-xs font-bold uppercase tracking-wider text-rose-400 font-semibold">Specify Custom Donation Type *</label>
+          <input id="field-dtype-other" type="text" placeholder="Describe your custom donation strategy..." class="w-full bg-slate-50 dark:bg-white/[0.02] border border-rose-400/40 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="field-notes" class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Additional Partnership Context</label>
+          <textarea id="field-notes" rows="3" placeholder="We are interested in setting up a regional scholarship strategy..." class="w-full bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 focus:border-rose-400 rounded-2xl p-4 text-sm text-slate-900 dark:text-white outline-none transition-all resize-none"></textarea>
+        </div>
+      `,
+      };
+
+      function handleDonorOtherOption(val) {
+        const otherWrapper = document.getElementById("donor-other-wrapper");
+        const otherInput = document.getElementById("field-dtype-other");
+        if (!otherWrapper || !otherInput) return;
+
+        if (val === "Other") {
+          otherWrapper.classList.remove("hidden");
+          otherInput.required = true;
+        } else {
+          otherWrapper.classList.add("hidden");
+          otherInput.required = false;
+          otherInput.value = "";
+        }
+      }
+
+      function switchFormType(type) {
+        currentFormType = type;
+        const container = document.getElementById("dynamicFieldsContainer");
+        const headerContext = document.getElementById("formHeaderContext");
+        const labelName = document.getElementById("label-reg-name");
+        const labelEmail = document.getElementById("label-reg-email");
+
+        container.innerHTML = fieldsTemplate[type];
+
+        // Reset styles for all navigation tabs
+        ["student", "volunteer", "donor"].forEach((t) => {
+          const tab = document.getElementById(`tab-${t}`);
+          if (tab)
+            tab.className =
+              "py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+        });
+
+        // Highlight active tab
+        const activeTab = document.getElementById(`tab-${type}`);
+        if (activeTab)
+          activeTab.className =
+            "py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm";
+
+        if (type === "student") {
+          headerContext.innerHTML = `<h2 class="font-serif font-bold text-2xl text-slate-900 dark:text-white mb-1">Student Sign Up</h2><p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">Official sign-up form for the Hands of Youth Service Association's online classes. Contact us at <a href="mailto:info@handsofyouth.ca" class="text-rose-500 hover:underline">info@handsofyouth.ca</a>.</p>`;
+          labelName.innerText = "Student's Full Name *";
+          labelEmail.innerText = "Student Email Address *";
+        } else if (type === "volunteer") {
+          headerContext.innerHTML = `<h2 class="font-serif font-bold text-2xl text-slate-900 dark:text-white mb-1">Volunteer Application</h2><p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">Join our operations network to build your professional and communal service portfolios.</p>`;
+          labelName.innerText = "Full Name *";
+          labelEmail.innerText = "Email Address *";
+        } else {
+          headerContext.innerHTML = `<h2 class="font-serif font-bold text-2xl text-slate-900 dark:text-white mb-1">Support & Donors Portal</h2><p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">Establish strategic corporate sponsorships or financial support modules directly.</p>`;
+          labelName.innerText = "Full Name / Representative *";
+          labelEmail.innerText = "Contact Email *";
+        }
+      }
+
+      // Capture Submit Actions safely
+      document
+        .getElementById("unifiedHubForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const submitBtn = document.getElementById("submitBtn");
+          const submitBtnText = document.getElementById("submitBtnText");
+          const errorBanner = document.getElementById("errorBanner");
+
+          submitBtn.disabled = true;
+          submitBtnText.innerText = "Transmitting to Registry Node...";
+          errorBanner.classList.add("hidden");
+
+          let queryTargetTable = "";
+          let finalPayload = {};
+
+          try {
+            const baseName = document.getElementById("reg-name").value;
+            const baseEmail = document.getElementById("reg-email").value;
+
+            if (currentFormType === "student") {
+              queryTargetTable = "students";
+
+              let classesArray = [];
+              if (document.getElementById("class-english")?.checked)
+                classesArray.push("English Program (Monday 7:00 - 8:30)");
+              if (document.getElementById("class-math")?.checked)
+                classesArray.push("Math Program (Friday 7:00 - 8:30)");
+              if (document.getElementById("class-uni")?.checked)
+                classesArray.push("University Admission Aid Program");
+
+              if (classesArray.length === 0) {
+                throw new Error(
+                  "Please select at least one class program entry.",
+                );
+              }
+
+              finalPayload = {
+                student_name: baseName,
+                student_email: baseEmail,
+                parent_name: document.getElementById("field-parent-name").value,
+                parent_email:
+                  document.getElementById("field-parent-email").value,
+                parent_phone:
+                  document.getElementById("field-parent-phone").value,
+                parent_social:
+                  document.getElementById("field-parent-social").value || "N/A",
+                selected_classes: classesArray.join(", "),
+                questions_comments:
+                  document.getElementById("field-comments").value || "None",
+              };
+            } else if (currentFormType === "volunteer") {
+              queryTargetTable = "volunteers";
+
+              let positionsArray = [];
+              if (document.getElementById("vol-eng")?.checked)
+                positionsArray.push("English Program");
+              if (document.getElementById("vol-math")?.checked)
+                positionsArray.push("Math Program");
+              if (document.getElementById("vol-uni")?.checked)
+                positionsArray.push("University Admission Aid");
+              if (document.getElementById("vol-social")?.checked)
+                positionsArray.push("Social Media Team");
+              if (document.getElementById("vol-logistics")?.checked)
+                positionsArray.push("Logistics Team");
+              if (document.getElementById("vol-hr")?.checked)
+                positionsArray.push("Human Resource Team");
+
+              if (positionsArray.length === 0) {
+                throw new Error(
+                  "Please select at least one position of interest.",
+                );
+              }
+
+              const cleanName = baseName.trim();
+              const nameParts = cleanName.split(/\s+/);
+              const firstName = nameParts[0] || "";
+              const lastName = nameParts.slice(1).join(" ") || "Not Provided";
+
+              finalPayload = {
+                first_name: firstName,
+                last_name: lastName,
+                email: baseEmail,
+                phone_number: document.getElementById("field-vol-phone").value,
+                position_of_interest: positionsArray.join(", "),
+                questions_comments:
+                  document.getElementById("field-vol-comments").value || "None",
+              };
+            } else if (currentFormType === "donor") {
+              queryTargetTable = "donors";
+
+              const selectedRadio = document.querySelector(
+                'input[name="donor-org-type"]:checked',
+              ).value;
+              const orgName = document.getElementById("field-org-name").value;
+              const finalOrgString = orgName
+                ? `${selectedRadio} (${orgName})`
+                : selectedRadio;
+
+              const selectValue =
+                document.getElementById("field-dtype-select").value;
+              const customValue =
+                document.getElementById("field-dtype-other")?.value || "";
+              const donationClassification =
+                selectValue === "Other"
+                  ? `Custom: ${customValue}`
+                  : selectValue;
+
+              if (!selectValue) {
+                throw new Error(
+                  "Please select a valid donation classification parameter.",
+                );
+              }
+
+              finalPayload = {
+                name: baseName,
+                email: baseEmail,
+                organization: finalOrgString,
+                donation_type: donationClassification,
+                notes: document.getElementById("field-notes").value || "None",
+              };
+            }
+
+            // Dispatch directly via Supabase client connector
+            const { data, error } = await _supabase
+              .from(queryTargetTable)
+              .insert([finalPayload]);
+
+            if (error) throw error;
+
+            // Dynamic success message adjustments based on context
+            const successTitle = document.getElementById("successTitle");
+            const successMessage = document.getElementById("successMessage");
+
+            if (currentFormType === "volunteer") {
+              if (successTitle)
+                successTitle.innerText = "Application Received!";
+              if (successMessage)
+                successMessage.innerText =
+                  "Our team has successfully received your request, we will contact you really soon.";
+            } else if (currentFormType === "donor") {
+              if (successTitle) successTitle.innerText = "Thank You!";
+              if (successMessage)
+                successMessage.innerText =
+                  "Thank you so much for your wish in donation. Our team will contact you soon with the information";
+            } else {
+              if (successTitle) successTitle.innerText = "Registration Saved!";
+              if (successMessage)
+                successMessage.innerText =
+                  "We will send an email shortly regarding information to determine student's level and to provide more details about the program.";
+            }
+
+            // Hide form and display Success Card Panel
+            document.getElementById("unifiedHubForm").classList.add("hidden");
+            document
+              .getElementById("formHeaderContext")
+              .classList.add("hidden");
+            document.getElementById("successCard").classList.remove("hidden");
+          } catch (error) {
+            errorBanner.innerText =
+              error.message || "A data network exception occurred.";
+            errorBanner.classList.remove("hidden");
+            submitBtn.disabled = false;
+            submitBtnText.innerText = "Submit Application Info →";
+          }
+        });
+
+      function toggleTheme() {
+        if (document.documentElement.classList.contains("dark")) {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        }
+      }
+
+      // Clean unified automatic initialization hook
+      document.addEventListener("DOMContentLoaded", () => {
+        let targetFormType = "student";
+        const urlParams = new URLSearchParams(window.location.search);
+        const purposeParam = urlParams.get("purpose");
+        const urlHash = window.location.hash.replace("#", "");
+        const validTypes = ["student", "volunteer", "donor"];
+
+        if (validTypes.includes(purposeParam)) {
+          targetFormType = purposeParam;
+        } else if (validTypes.includes(urlHash)) {
+          targetFormType = urlHash;
+        }
+
+        switchFormType(targetFormType);
+      });
+    </script>
+  </body>
+</html>

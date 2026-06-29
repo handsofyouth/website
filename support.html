@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Us | Hands of Youth</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="bg-white dark:bg-neutral-900 text-slate-800 dark:text-slate-200 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+
+  <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12 md:py-20 flex flex-col gap-16 md:gap-24">
+
+    <section class="page hero grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+      <div class="md:col-span-7 flex flex-col items-start text-left">
+        <div class="eyebrow inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 font-bold text-[11px] text-red-700 uppercase tracking-wider mb-6">Support us</div>
+        <h1 class="font-serif font-bold text-4xl sm:text-5xl md:text-6xl text-slate-900 dark:text-white tracking-tight leading-[1.12] mb-6">
+          Bring your ideas <span class="text-red-600">here</span>.
+        </h1>
+        <p class="lead text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mb-8">Sponsorships, donations, and partnerships help us educate and empower youth through free support and community projects.</p>
+        <div class="actions flex flex-wrap gap-4 w-full sm:w-auto">
+          <a class="button inline-flex items-center justify-center text-center px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold text-sm rounded-xl transition-all w-full sm:w-auto" href="contact.html">Let us chat today</a>
+          <a class="button alt inline-flex items-center justify-center text-center px-6 py-3.5 bg-white dark:bg-neutral-800 border border-red-200 dark:border-neutral-700 hover:bg-red-50 text-slate-800 dark:text-slate-200 font-bold text-sm rounded-xl transition-all w-full sm:w-auto" href="#give">Explore giving</a>
+        </div>
+      </div>
+      <div class="photo_frame md:col-span-5 relative group overflow-hidden rounded-3xl">
+        <img class="w-full h-[300px] sm:h-[400px] object-cover transition-transform duration-500 ease-in-out hover:scale-[1.03]" src="assets/images/support_hero.jpg" alt="Hands of Youth collaboration event">
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div class="card flex flex-col justify-center bg-white dark:bg-neutral-800 p-8 sm:p-10 rounded-3xl shadow-md border border-red-100 dark:border-neutral-700">
+          <h2 class="font-serif font-bold text-3xl sm:text-4xl text-slate-900 dark:text-white mb-6 leading-tight">
+            Offline, online, <span class="text-red-600">you decide</span>.
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+            We are here to drive change. Hands of Youth is grateful for collaboration requests and partnership opportunities. Whether your organization is local or international, we are happy to connect.
+          </p>
+        </div>
+        <div class="image_card flex flex-col bg-white dark:bg-neutral-800 p-4 rounded-3xl shadow-md border border-red-100 dark:border-neutral-700">
+          <div class="overflow-hidden rounded-2xl mb-4">
+            <img class="w-full h-56 sm:h-64 object-cover transition-transform duration-500 ease-in-out hover:scale-[1.03]" src="assets/images/support_people.jpg" alt="Hands of Youth student support event">
+          </div>
+          <p class="px-2 text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 text-center">Partnerships help us reach more students and families.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="give">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 bg-red-600 p-8 sm:p-12 rounded-[2.5rem] shadow-xl">
+        <div class="md:col-span-7 flex flex-col justify-center items-start">
+          <h2 class="font-serif font-bold text-3xl sm:text-4xl text-white mb-6 leading-tight">
+            Your donation goes <span class="text-red-200">far</span>.
+          </h2>
+          <p class="text-white/90 text-sm sm:text-base leading-relaxed mb-4">Donations help support tutoring, community initiatives, event materials, and student focused programs.</p>
+          <p class="text-red-200 text-sm leading-relaxed mb-8">Small actions can create big change when the community works together.</p>
+          <div class="actions w-full sm:w-auto">
+            <a class="button inline-flex items-center justify-center text-center px-8 py-4 bg-white text-red-600 hover:bg-red-50 font-bold text-sm rounded-xl transition-all w-full sm:w-auto" href="contact.html#donor">Donate or sponsor</a>
+          </div>
+        </div>
+        <div class="image_card md:col-span-5 bg-white/10 p-4 rounded-3xl border border-white/20">
+          <div class="overflow-hidden rounded-2xl mb-4">
+            <img class="w-full h-48 sm:h-56 object-cover transition-transform duration-500 ease-in-out hover:scale-[1.03]" src="assets/images/support_donation.jpg" alt="Hands of Youth donation booth">
+          </div>
+          <p class="px-2 text-xs text-white/80 font-medium text-center">Community support helps keep our programs moving forward.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer bg-slate-900 dark:bg-black py-12 text-slate-400">
+    <div class="page footer_inner max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
+        <div class="footer_brand flex items-center gap-3">
+          <img class="w-9 h-9 object-contain opacity-80 transition-transform duration-500 ease-in-out hover:scale-[1.03]"  src="assets/images/logo-icon.png" alt="Hands of Youth logo">
+          <div class="flex flex-col leading-none">
+            <p class="footer_brand_title font-bold text-white text-sm">Hands of Youth Service Association</p>
+            <p class="footer_brand_since text-[11px] text-red-500 mt-0.5">Since 2020</p>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500">© 2026 Hands of Youth Service Association Canada. All rights reserved.</p>
+      </div>
+      <div class="footer_links flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium text-xs sm:text-sm text-slate-400">
+        <a href="index.html" class="hover:text-white transition">Home</a>
+        <a href="discover.html" class="hover:text-white transition">Discover</a>
+        <a href="tutoring.html" class="hover:text-white transition">Peer2Peer</a>
+        <a href="volunteer.html" class="hover:text-white transition">Volunteer</a>
+        <a href="support.html" class="text-red-400 font-bold transition">Support Us</a>
+        <a href="contact.html" class="hover:text-white transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    // Toggle Mobile Menu Visibility
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Toggle Theme and Persist Choice
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+  </script>
+</body>
+</html>
